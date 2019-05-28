@@ -18,7 +18,47 @@ function createTable() {
     }
 }
 
-createTable();
+function init() {
+    createTable();
+
+    var $fireButton = document.querySelector('#fireButton');
+    $fireButton.addEventListener('click', handleFireButton);
+}
+
+window.addEventListener('load', init);
+
+function handleFireButton() {
+    var $guessInput = document.querySelector('#guessInput');
+    var guess = $guessInput.value;
+
+    controller.processGuess(guess);
+    $guessInput.value = '';
+}
+
+// игра
+
+function parseQuess(quess) {
+var alphabet = ['A', 'B', 'C', 'D', 'E', 'F', 'G'];
+
+    if (quess === null || quess.length !== 2) {
+        alert('Oops, please enter a letter and a number on the board!');
+    } else {
+        firstChar = quess.charAt(0).toUpperCase();
+        var row = alphabet.indexOf(firstChar);
+        var column = quess.charAt(1);
+
+        if (isNaN(row) || isNaN(column)) {
+            alert('Oops, that isnt on the board.');
+        }  else if (row < 0 || row >= model.boardSize || column < 0 || column >= model.boardSize) {
+            alert('Oops, thats off the board!');
+        } else {
+            return row + column;
+        }
+    }
+    return null;
+}
+
+
 
 var view = {
     displayMessage: function(msg) {
@@ -75,6 +115,22 @@ var model = {
         return true;
     },
 };
+
+var controller = {
+    quesses: 0,
+
+    processGuess: function(quess) {
+        var location = parseQuess(quess);
+        if (location) {
+            this.quesses++;
+            var hit = model.fire(location);
+            if(hit && model.shipsSunk === model.numShips) {
+                view.displayMessage('You sank all my battleships, in ' + this.quesses + ' quesses');
+            }
+        }
+    }
+};
+
 
 
 

@@ -46,10 +46,10 @@ form input {
     font-size: 1em;
 }
 
-input#quessInput {
+input#guessInput {
     padding-left: 15px;
     padding-right: 15px;
-    text-transform: uppercase;
+    
 }
 
 .hit {
